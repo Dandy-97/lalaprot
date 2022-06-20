@@ -4,7 +4,6 @@
       <div slot="header" class="clearfix">
         <h3>lalapaot商超管理系统</h3>
       </div>
-
       <!-- 表单 -->
       <el-form
         :model="ruleForm"

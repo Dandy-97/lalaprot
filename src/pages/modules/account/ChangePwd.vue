@@ -143,6 +143,7 @@ export default {
       .pwd-btn {
         display: flex;
         justify-content: center;
+        padding-top: 30px;
       }
     }
   }

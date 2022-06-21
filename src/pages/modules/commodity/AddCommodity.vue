@@ -13,7 +13,12 @@
       >
         <el-form-item label="所属分类" prop="category">
           <el-select v-model="ruleForm.category" placeholder="请选择分类">
-            <el-option :label="item.label" :value="item.value" v-for="item in options" :key="item.value"></el-option>
+            <el-option
+              :label="item.name"
+              :value="item.id"
+              v-for="item in options"
+              :key="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
 
@@ -69,40 +74,14 @@
 <script>
 import { addcommodity } from "@/apis/apis.js";
 
+// 引入公共数据
+import { goodsCategoryOptions } from "@/utils/index.js";
+
 export default {
   data() {
     return {
-      /* 分类 */
-      options: [
-        {
-          value: "1",
-          label: "烟酒",
-        },
-        {
-          value: "2",
-          label: "饮品",
-        },
-        {
-          value: "3",
-          label: "干货",
-        },
-        {
-          value: "4",
-          label: "果蔬/生鲜",
-        },
-        {
-          value: "5",
-          label: "调味品",
-        },
-        {
-          value: "6",
-          label: "百货类",
-        },
-        {
-          value: "7",
-          label: "日用品",
-        },
-      ],
+      // 公共数据—分类明细
+      options: goodsCategoryOptions,
       ruleForm: {
         barCode: "", // 条形码
         name: "", // 商品名
@@ -113,7 +92,9 @@ export default {
         category: "", // 分类
       },
       rules: {
-        barCode: [{ required: true, message: "请输入条形码", trigger: "blur" }],
+        barCode: [
+          { required: true, message: "请输入条形码", trigger: "change" },
+        ],
         name: [{ required: true, message: "请输入商品名", trigger: "blur" }],
         salePrice: [{ required: true, message: "请输入售价", trigger: "blur" }],
         storenum: [{ required: true, message: "请输入库存", trigger: "blur" }],
@@ -130,6 +111,7 @@ export default {
     };
   },
   methods: {
+    /* 添加按钮发起请求 */
     submitForm(myRuleForm) {
       this.$refs[myRuleForm].validate((valid) => {
         if (valid) {
@@ -142,8 +124,15 @@ export default {
             this.ruleForm.vipDiscount,
             this.ruleForm.barCode
           ).then((res) => {
-            console.log(res);
-            console.log(this.ruleForm);
+            console.log(
+              this.ruleForm.name,
+              this.ruleForm.category,
+              this.ruleForm.promotion,
+              this.ruleForm.salePrice,
+              this.ruleForm.storenum,
+              this.ruleForm.vipDiscount,
+              this.ruleForm.barCode
+            );
             if (res.data == "ok") {
               this.$message({
                 message: "商品添加成功",

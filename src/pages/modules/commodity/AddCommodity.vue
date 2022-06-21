@@ -12,8 +12,8 @@
         class="myRuleForm"
       >
         <el-form-item label="所属分类" prop="category">
-          <el-select v-model="ruleForm.category" placeholder="请选择活动区域">
-            <el-option label="烟酒" value="yanjiu"></el-option>
+          <el-select v-model="ruleForm.category" placeholder="请选择分类">
+            <el-option :label="item.label" :value="item.value" v-for="item in options" :key="item.value"></el-option>
           </el-select>
         </el-form-item>
 
@@ -28,7 +28,10 @@
         <el-form-item label="条形码" prop="barCode">
           <div class="barCode">
             <el-input v-model="ruleForm.barCode"></el-input>
-            <el-button icon="el-icon-circle-plus-outline" @click="randomcode"></el-button>
+            <el-button
+              icon="el-icon-circle-plus-outline"
+              @click="randomcode"
+            ></el-button>
           </div>
         </el-form-item>
 
@@ -69,6 +72,37 @@ import { addcommodity } from "@/apis/apis.js";
 export default {
   data() {
     return {
+      /* 分类 */
+      options: [
+        {
+          value: "1",
+          label: "烟酒",
+        },
+        {
+          value: "2",
+          label: "饮品",
+        },
+        {
+          value: "3",
+          label: "干货",
+        },
+        {
+          value: "4",
+          label: "果蔬/生鲜",
+        },
+        {
+          value: "5",
+          label: "调味品",
+        },
+        {
+          value: "6",
+          label: "百货类",
+        },
+        {
+          value: "7",
+          label: "日用品",
+        },
+      ],
       ruleForm: {
         barCode: "", // 条形码
         name: "", // 商品名

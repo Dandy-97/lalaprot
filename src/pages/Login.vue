@@ -92,7 +92,13 @@ export default {
           login(this.ruleForm.acc, this.ruleForm.pwd).then((res) => {
             // 传入参数给后台进行判定
             if ((res.data.msg == "登录成功")) {
+              // console.log(res);
+              // 登录后，把用户ID保存在浏览器中
               localStorage.setItem("id", res.data.id);
+              // 把token令牌写入到本地存储
+              localStorage.setItem("token", res.data.token);
+              // 保存用户名
+              localStorage.setItem("acc", this.ruleForm.acc);
               this.$message({
                 message: "恭喜你，登录成功",
                 type: "success",

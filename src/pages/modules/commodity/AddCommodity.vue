@@ -115,24 +115,7 @@ export default {
     submitForm(myRuleForm) {
       this.$refs[myRuleForm].validate((valid) => {
         if (valid) {
-          addcommodity(
-            this.ruleForm.name,
-            this.ruleForm.category,
-            this.ruleForm.promotion,
-            this.ruleForm.salePrice,
-            this.ruleForm.storenum,
-            this.ruleForm.vipDiscount,
-            this.ruleForm.barCode
-          ).then((res) => {
-            console.log(
-              this.ruleForm.name,
-              this.ruleForm.category,
-              this.ruleForm.promotion,
-              this.ruleForm.salePrice,
-              this.ruleForm.storenum,
-              this.ruleForm.vipDiscount,
-              this.ruleForm.barCode
-            );
+          addcommodity(this.ruleForm).then((res) => {
             if (res.data == "ok") {
               this.$message({
                 message: "商品添加成功",

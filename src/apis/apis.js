@@ -12,6 +12,15 @@ export function login(acc, pwd) {
     })
 }
 
+// token验证
+export function token(token) {
+    return axios.get(IP + "/gettoken", {
+        params: {
+            token  // 当前用户的token
+        }
+    })
+}
+
 // 商品管理-商品管理（显示商品表格）
 export function commodity(curpage, row) {
     return axios.get(IP + "/main/commodity", {
@@ -39,7 +48,7 @@ export function removeCommodity(barCode) {
 }
 
 // 商品管理-添加商品
-export function addcommodity(name, category, promotion, salePrice, storenum, vipDiscount, barCode) {
+export function addcommodity(params) {
     /* 
     barCode     // 条形码
     name          // 商品名
@@ -50,9 +59,7 @@ export function addcommodity(name, category, promotion, salePrice, storenum, vip
     vipDiscount  // 会员优惠
     */
     return axios.get(IP + "/main/addcommodity", {
-        params: {
-            name, category, promotion, salePrice, storenum, vipDiscount, barCode
-        }
+        params
     })
 }
 

@@ -1,3 +1,4 @@
+// 商品管理-商品管理-公共数据
 export const goodsCategoryOptions = [
     {
       id: "1",

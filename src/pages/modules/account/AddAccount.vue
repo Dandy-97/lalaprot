@@ -109,6 +109,7 @@ export default {
     submitForm() {
       this.$refs.ruleForm.validate((valida) => {
         if (valida) {
+            // 深拷贝
             let params = JSON.parse(JSON.stringify(this.ruleForm))
             delete params.pwdex
           addaccount(params).then((res) => {

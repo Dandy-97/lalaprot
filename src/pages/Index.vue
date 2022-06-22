@@ -9,8 +9,11 @@
         </h2>
         <div class="head-box">
           <img src="../assets/imgs/toux.jpg" alt="" />
-          <!-- <label><router-link to="/">{{ username }}</router-link></label> -->
-          <label>admin</label>
+          <label><router-link to="/">{{ username }}</router-link></label>
+          <div class="off">
+            <label><router-link to="/">注销</router-link></label>
+          </div>
+          <!-- <label>admin</label> -->
         </div>
       </el-header>
       <el-container>
@@ -67,9 +70,11 @@
 </template>
 
 <script>
+import { token } from "@/apis/apis";
 export default {
   data() {
     return {
+      username: '', // 用户名
       // 动态菜单创建
       treelist: [
         {
@@ -131,11 +136,24 @@ export default {
       ],
     };
   },
+  created() {
+    // 调用koken验证 (通过验证token来动态保存右上角用户渲染)
+    token(localStorage.getItem("token")).then((res) => {
+      // console.log(res);
+      if(res.data == 'ok') {
+        this.username = localStorage.getItem("acc")
+      }else {
+        this.username = '请登录'
+      }
+    });
+  },
   methods: {
     handleOpen(key, keyPath) {
+      // 选项卡展开时触发的函数
       console.log(key, keyPath);
     },
     handleClose(key, keyPath) {
+      // 选项卡关闭时触发的函数
       console.log(key, keyPath);
     },
   },
@@ -160,6 +178,13 @@ export default {
           width: 40px;
           border-radius: 50%;
           margin-right: 20px;
+        }
+        a {
+          color: #fff;
+          text-decoration: none;
+        }
+        .off {
+          margin-left: 20px;
         }
       }
     }

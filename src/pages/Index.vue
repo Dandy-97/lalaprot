@@ -39,6 +39,7 @@
               :index="item.index"
               v-for="item in treelist"
               :key="item.id"
+              v-show="item.userGroup.indexOf(userGroup) != -1"
             >
               <template slot="title">
                 <i :class="item.cls"></i>
@@ -75,6 +76,7 @@ export default {
   data() {
     return {
       username: '', // 用户名
+      userGroup: '', // 权限管理
       // 动态菜单创建
       treelist: [
         {
@@ -85,6 +87,7 @@ export default {
             { index: "/main/commodity", name: "商品管理" },
             { index: "/main/addcommodity", name: "添加管理" },
           ],
+          userGroup: ["1", "2"],
         },
         {
           index: "2",
@@ -95,6 +98,7 @@ export default {
             { index: "/main/changepwd", name: "修改密码" },
             { index: "/main/addaccount", name: "增加账号" },
           ],
+          userGroup: ["1"],
         },
         {
           index: "3",
@@ -104,6 +108,7 @@ export default {
             { index: "/main/stock", name: "库存管理" },
             { index: "/main/addstock", name: "添加库存" },
           ],
+          userGroup: ["1", "2"],
         },
         {
           index: "4",
@@ -114,6 +119,7 @@ export default {
             { index: "/main/clearout", name: "商品出库" },
             { index: "/main/clearback", name: "商品退货" },
           ],
+          userGroup: ["1", "2"],
         },
         {
           index: "5",
@@ -123,6 +129,7 @@ export default {
             { index: "/main/sta", name: "销售统计" },
             { index: "/main/stocksta", name: "进货统计" },
           ],
+          userGroup: ["1"],
         },
         {
           index: "6",
@@ -132,11 +139,14 @@ export default {
             { index: "/main/vip", name: "会员管理" },
             { index: "/main/addvip", name: "添加会员" },
           ],
+          userGroup: ["1"],
         },
       ],
     };
   },
   created() {
+    // 保存登录后台传的userGroup值
+    this.userGroup = localStorage.getItem("userGroup")
     // 调用koken验证 (通过验证token来动态保存右上角用户渲染)
     token(localStorage.getItem("token")).then((res) => {
       // console.log(res);

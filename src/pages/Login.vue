@@ -99,6 +99,8 @@ export default {
               localStorage.setItem("token", res.data.token);
               // 保存用户名
               localStorage.setItem("acc", this.ruleForm.acc);
+              // 保存usergroup值
+              localStorage.setItem("userGroup", res.data.userGroup);
               this.$message({
                 message: "恭喜你，登录成功",
                 type: "success",

@@ -8,8 +8,23 @@
           LaLapaot商超管理系统
         </h2>
         <div class="head-box">
-          <img src="../assets/imgs/toux.jpg" alt="" />
-          <label><router-link to="/">{{ username }}</router-link></label>
+          <!-- 头像 -->
+          <!-- <img src="../assets/imgs/toux.jpg" alt="" /> -->
+          <el-upload
+            class="avatar-uploader"
+            :action="imgaction"
+            name="inputFile"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+          <!-- 用户 -->
+          <label>
+            <router-link v-if="username === '请登录'" to="/">{{ username }}</router-link>
+            <span v-else>{{ username }}</span>
+          </label>
           <div class="off">
             <label><router-link to="/">注销</router-link></label>
           </div>
@@ -75,8 +90,11 @@ import { token } from "@/apis/apis";
 export default {
   data() {
     return {
-      username: '', // 用户名
-      userGroup: '', // 权限管理
+      username: "请登录", // 用户名
+      userGroup: "", // 权限管理
+      imageUrl: "",  // 用户头像
+      imgaction: "",
+
       // 动态菜单创建
       treelist: [
         {
@@ -145,15 +163,20 @@ export default {
     };
   },
   created() {
+    console.log(localStorage.getItem("avatarUrl"));
     // 保存登录后台传的userGroup值
-    this.userGroup = localStorage.getItem("userGroup")
+    this.userGroup = localStorage.getItem("userGroup");
+
+    // 动态获取id 保存 imgaction值
+    this.imgaction = "http://192.168.2.6:3000/upload?id=" + localStorage.getItem("id")
+
     // 调用koken验证 (通过验证token来动态保存右上角用户渲染)
-    token(localStorage.getItem("token")).then((res) => {
+    token({token: localStorage.getItem("token")}).then((res) => {
       // console.log(res);
-      if(res.data == 'ok') {
-        this.username = localStorage.getItem("acc")
-      }else {
-        this.username = '请登录'
+      if (res.data == "ok") {
+        this.username = localStorage.getItem("acc");
+      } else {
+        this.username = "请登录";
       }
     });
   },
@@ -165,6 +188,11 @@ export default {
     handleClose(key, keyPath) {
       // 选项卡关闭时触发的函数
       console.log(key, keyPath);
+    },
+    // 头像上传成功
+    handleAvatarSuccess(res) {
+      // console.log(res);
+      this.imageUrl = res
     },
   },
 };

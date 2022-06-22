@@ -101,6 +101,8 @@ export default {
               localStorage.setItem("acc", this.ruleForm.acc);
               // 保存usergroup值
               localStorage.setItem("userGroup", res.data.userGroup);
+              // 写入用户头像
+              localStorage.setItem("avatarUrl", res.data.avatarUrl);
               this.$message({
                 message: "恭喜你，登录成功",
                 type: "success",
@@ -108,7 +110,7 @@ export default {
               // 登录成功获取ID值，保存在浏览器中
               // 登录成功进行延时页面跳转
               setTimeout(() => {
-                this.$router.push("/main/commodity");
+                this.$router.replace("/main/commodity");
               }, 1000);
             }else{
               this.$message.error("用户名或密码错误");

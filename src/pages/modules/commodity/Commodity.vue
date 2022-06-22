@@ -6,6 +6,21 @@
       </div>
 
       <!-- 商品管理内容部分 -->
+      <el-form :model="form" ref="form" label-width="100px" class="myForm">
+        <el-form-item label="所属分类" prop="category">
+          <el-select v-model="form.category" placeholder="请选择分类">
+            <el-option
+              :label="item.name"
+              :value="item.id"
+              v-for="item in options"
+              :key="item.id"
+            ></el-option>
+          </el-select>
+          <el-button @click="find">查询</el-button>
+          <el-button @click="reset">重置</el-button>
+        </el-form-item>
+      </el-form>
+      <!-- 表格 -->
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="条形码">
           <template slot-scope="scope">
@@ -20,7 +35,9 @@
         <el-table-column label="所属分类">
           <template slot-scope="scope">
             <!-- 过滤器 -->
-            <span style="margin-left: 10px">{{ scope.row.category | categoryName }}</span>
+            <span style="margin-left: 10px">{{
+              scope.row.category | categoryName
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column label="售价">
@@ -62,7 +79,6 @@
           </template>
         </el-table-column>
       </el-table>
-
       <!-- 分页 -->
       <div class="block">
         <!-- 
@@ -86,7 +102,6 @@
         </el-pagination>
       </div>
     </el-card>
-
     <!-- 编辑弹出框 -->
     <el-dialog title="编辑商品" :visible.sync="dialogFormVisible">
       <el-form :model="form">
@@ -116,9 +131,14 @@
 </template>
 
 <script>
-import { commodity, changeCommodity, removeCommodity } from "@/apis/apis";
+import {
+  commodity,
+  changeCommodity,
+  removeCommodity,
+  categoryFind,
+} from "@/apis/apis";
 // 引入公共数据
-import { categoryName } from "@/utils/index.js";
+import { categoryName, goodsCategoryOptions } from "@/utils/index.js";
 
 export default {
   data() {
@@ -136,6 +156,8 @@ export default {
         category: "", //分类
       },
       formLabelWidth: "120px",
+      // 公共数据—分类明细
+      options: goodsCategoryOptions,
     };
   },
   // 过滤器
@@ -144,13 +166,28 @@ export default {
     //     console.log(value);
     //     return goodsCategoryFn()[value]
     // }
-    categoryName
+    categoryName,
   },
   created() {
     // 初始获取页面数据(当前调用传data数据默认curpage值)
-    this.ajaxcommodity(this.curpage);
+    this.ajaxcommodity();
   },
   methods: {
+    // 分类查找按钮
+    find() {
+      categoryFind(this.form.category).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          this.tableData = res.data;
+        }
+      });
+    },
+    reset() {
+      this.curpage = 1;
+      this.row = 5;
+      this.form.category = '';
+      this.ajaxcommodity();
+    },
     // 点击编辑修改按钮
     clickchange() {
       //点击修改
@@ -164,7 +201,7 @@ export default {
           });
 
           /* 重新刷新当前页数据 */
-          this.ajaxcommodity(this.curpage)
+          this.ajaxcommodity();
         }
       });
     },
@@ -198,7 +235,7 @@ export default {
                 message: "删除成功!",
               });
               // 调用请求渲染页面
-              this.ajaxcommodity(this.curpage);
+              this.ajaxcommodity();
             }
           });
         })
@@ -211,25 +248,25 @@ export default {
     },
     // 当前页显示条数发生改变(显示条数按钮)
     handleSizeChange(val) {
-    //   console.log(`每页 ${val} 条`);
+      //   console.log(`每页 ${val} 条`);
       // 每页行数赋值
       this.row = val;
       // 调用请求渲染页面
-      this.ajaxcommodity(this.curpage);
+      this.ajaxcommodity();
     },
     // 当前页数发生改变(页数按钮)
     handleCurrentChange(val) {
-    //   console.log(`当前页: ${val}`);
-      // 调用请求，动态传入请求页值
-      this.ajaxcommodity(val);
+      //   console.log(`当前页: ${val}`);
       // 页面改变时保存curpage的值
-      this.curpage = val
+      this.curpage = val;
+      // 调用请求，动态传入请求页值
+      this.ajaxcommodity();
     },
 
     // 封装commodity后台请求(方便多次调用 设置page(当前请求页数) 动态传参)
-    ajaxcommodity(page) {
-      commodity(page, this.row).then((res) => {
-        // console.log(res);
+    ajaxcommodity() {
+      commodity({curpage:this.curpage, row:this.row}).then((res) => {
+        console.log(res);
         // 后台数据获取设置渲染页面
         this.tableData = res.data.data;
         // 后台总条数获取设置

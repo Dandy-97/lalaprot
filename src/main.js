@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
     //to指代的是当前循环出来的路由对象
     if (to.meta.requireAuth) {
         // 根据token来决定是否能看到管理系统
-        token(localStorage.getItem('token'))
+        token({token: localStorage.getItem('token')})
             .then((res) => {
                 if (res.data == 'ok') {
                     // 用户已登录

@@ -13,20 +13,24 @@ export function login(acc, pwd) {
 }
 
 // token验证
-export function token(token) {
+export function token(params) {
     return axios.get(IP + "/gettoken", {
-        params: {
-            token  // 当前用户的token
-        }
+        params
     })
 }
 
 // 商品管理-商品管理（显示商品表格）
-export function commodity(curpage, row) {
+export function commodity(params) {
     return axios.get(IP + "/main/commodity", {
+        params
+    })
+}
+
+// 商品管理-分类查找商品
+export function categoryFind(category) {
+    return axios.get(IP + "/main/categoryFind", {
         params: {
-            curpage,  // 当前请求的页数
-            row,       // 每页显示的行数
+            category
         }
     })
 }
@@ -94,4 +98,11 @@ export function changepwd(id, newpwd, pwd) {
 // 账号管理-添加账号
 export function addaccount(params) {
     return axios.post(IP + "/main/addaccount", params)
+}
+
+// 入库管理-添加库存
+export function addstock(params) {
+    return axios.get(IP + "/main/addstock", {
+        params
+    })
 }

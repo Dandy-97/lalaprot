@@ -18,9 +18,9 @@
               placeholder="请输入条形码"
             ></el-input>
           </el-form-item>
-          <el-form-item label="入库数量" prop="stockCount">
+          <el-form-item label="入库数量" prop="storenum">
             <el-input
-              v-model="ruleForm.stockCount"
+              v-model="ruleForm.storenum"
               placeholder="请输入入库数量"
             ></el-input>
           </el-form-item>
@@ -49,7 +49,7 @@ export default {
     return {
       ruleForm: {
         barCode: "", // 条形码
-        stockCount: "", // 入库数量
+        storenum: "", // 入库数量
         stockPrice: "", // 进价
       },
     };

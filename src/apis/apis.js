@@ -104,3 +104,8 @@ export function addstock(params) {
         params
     })
 }
+
+// 统计管理-销售统计-获取统计数据
+export function getEchartsData() {
+    return axios.get(IP + "/getEchartsData")
+}

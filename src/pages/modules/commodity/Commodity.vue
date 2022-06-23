@@ -118,8 +118,15 @@
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item label="分类" :label-width="formLabelWidth">
-          <el-input v-model="form.category" autocomplete="off"></el-input>
+        <el-form-item label="分类" prop="category" :label-width="formLabelWidth">
+          <el-select v-model="form.category" autocomplete="off">
+            <el-option
+              :label="item.name"
+              :value="item.id"
+              v-for="item in options"
+              :key="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -138,6 +145,7 @@ import {
   categoryFind,
 } from "@/apis/apis";
 // 引入公共数据
+/* goodsCategoryOptions  抽取的公共参数 */
 import { categoryName, goodsCategoryOptions } from "@/utils/index.js";
 
 export default {
@@ -175,8 +183,8 @@ export default {
   methods: {
     // 分类查找按钮
     find() {
-      categoryFind(this.form.category).then((res) => {
-        console.log(res);
+      categoryFind({category: this.form.category}).then((res) => {
+        // console.log(res);
         if (res.status === 200) {
           this.tableData = res.data;
         }
@@ -199,7 +207,6 @@ export default {
             message: "修改成功",
             type: "success",
           });
-
           /* 重新刷新当前页数据 */
           this.ajaxcommodity();
         }
@@ -228,7 +235,7 @@ export default {
         .then(() => {
           // 点击确定后进行删除  调用removeCommodity接口
           removeCommodity(row.barCode).then((res) => {
-            console.log(res);
+            // console.log(res);
             if (res.data == "ok") {
               this.$message({
                 type: "success",
@@ -266,7 +273,7 @@ export default {
     // 封装commodity后台请求(方便多次调用 设置page(当前请求页数) 动态传参)
     ajaxcommodity() {
       commodity({curpage:this.curpage, row:this.row}).then((res) => {
-        console.log(res);
+        // console.log(res);
         // 后台数据获取设置渲染页面
         this.tableData = res.data.data;
         // 后台总条数获取设置

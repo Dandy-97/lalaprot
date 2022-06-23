@@ -27,11 +27,9 @@ export function commodity(params) {
 }
 
 // 商品管理-分类查找商品
-export function categoryFind(category) {
+export function categoryFind(params) {
     return axios.get(IP + "/main/categoryFind", {
-        params: {
-            category
-        }
+        params
     })
 }
 

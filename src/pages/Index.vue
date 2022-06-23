@@ -9,7 +9,6 @@
         </h2>
         <div class="head-box">
           <!-- 头像 -->
-          <!-- <img src="../assets/imgs/toux.jpg" alt="" /> -->
           <el-upload
             class="avatar-uploader"
             :action="imgaction"
@@ -18,11 +17,13 @@
             :on-success="handleAvatarSuccess"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <i v-else class="el-icon-plus"></i>
           </el-upload>
           <!-- 用户 -->
           <label>
-            <router-link v-if="username === '请登录'" to="/">{{ username }}</router-link>
+            <router-link v-if="username === '请登录'" to="/">{{
+              username
+            }}</router-link>
             <span v-else>{{ username }}</span>
           </label>
           <div class="off">
@@ -92,8 +93,8 @@ export default {
     return {
       username: "请登录", // 用户名
       userGroup: "", // 权限管理
-      imageUrl: "",  // 用户头像
-      imgaction: "",
+      imageUrl: "", // 用户头像
+      imgaction: "", // 定义动态路径传参变量
 
       // 动态菜单创建
       treelist: [
@@ -163,15 +164,25 @@ export default {
     };
   },
   created() {
-    console.log(localStorage.getItem("avatarUrl"));
     // 保存登录后台传的userGroup值
     this.userGroup = localStorage.getItem("userGroup");
 
     // 动态获取id 保存 imgaction值
-    this.imgaction = "http://192.168.2.6:3000/upload?id=" + localStorage.getItem("id")
+    this.imgaction =
+      "http://192.168.2.6:3000/upload?id=" + localStorage.getItem("id");
+
+    // 设置用户默认头像
+    // console.log(localStorage.getItem("avatarUrl"));
+    var imgurl = localStorage.getItem("avatarUrl");
+    if (imgurl === "null") {
+      this.imageUrl = require("@/assets/imgs/toux.jpg");
+    } else {
+      // 设置用户头像 (通过登录进来拿取数据库数据进行渲染，重复登录依然显示效果)
+      this.imageUrl = localStorage.getItem("avatarUrl");
+    }
 
     // 调用koken验证 (通过验证token来动态保存右上角用户渲染)
-    token({token: localStorage.getItem("token")}).then((res) => {
+    token({ token: localStorage.getItem("token") }).then((res) => {
       // console.log(res);
       if (res.data == "ok") {
         this.username = localStorage.getItem("acc");
@@ -192,7 +203,7 @@ export default {
     // 头像上传成功
     handleAvatarSuccess(res) {
       // console.log(res);
-      this.imageUrl = res
+      this.imageUrl = res;
     },
   },
 };
